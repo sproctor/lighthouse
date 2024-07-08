@@ -1,17 +1,31 @@
 import lighthouse.setupLibraryModule
 
 plugins {
-    id("com.android.library")
-    id("kotlin-android")
+    id(libs.plugins.android.library.get().pluginId)
+    id(libs.plugins.kotlin.multiplatform.get().pluginId)
 }
 
 setupLibraryModule(moduleName = "com.ivanempire.lighthouse", shouldBePublished = true)
 
-dependencies {
-    implementation(libs.androidx.core)
-    implementation(libs.android.coroutines)
+kotlin {
+    androidTarget()
+    jvm()
 
-    testImplementation(libs.mockito.core)
-    testImplementation(libs.testing.junit)
-    testImplementation(libs.kotlinx.coroutines.test)
+    sourceSets {
+        val commonMain by getting {
+            dependencies {
+                implementation(libs.android.coroutines)
+            }
+        }
+        val androidMain by getting {
+            dependencies {
+                implementation(libs.androidx.core)
+            }
+        }
+    }
 }
+//dependencies {
+//    testImplementation(libs.mockito.core)
+//    testImplementation(libs.testing.junit)
+//    testImplementation(libs.kotlinx.coroutines.test)
+//}

@@ -1,4 +1,6 @@
 plugins {
+    id(libs.plugins.android.library.get().pluginId) apply false
+    id(libs.plugins.kotlin.multiplatform.get().pluginId) apply false
     alias(libs.plugins.ktfmt)
 }
 
@@ -7,4 +9,8 @@ subprojects {
     ktfmt {
         kotlinLangStyle()
     }
+}
+
+tasks.wrapper {
+    gradleVersion = "8.8"
 }

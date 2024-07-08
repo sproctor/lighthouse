@@ -1,27 +1,53 @@
 import lighthouse.setupDemoModule
 
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
+    id(libs.plugins.kotlin.multiplatform.get().pluginId)
+    id(libs.plugins.android.application.get().pluginId)
+    alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.compose.compiler)
 }
 
 setupDemoModule(name = "com.ivanempire.lighthouse.demo")
 
-dependencies {
-    // Core Android libraries
-    implementation(libs.androidx.core)
-    implementation(libs.androidx.runtime)
+kotlin {
+    androidTarget()
+    jvm()
 
-    // Compose libraries
-    implementation(platform("androidx.compose:compose-bom:2023.01.00"))
-    implementation(libs.material3)
+    jvmToolchain(17)
 
-    // Compose integration with activities
-    implementation(libs.compose.activity)
+    sourceSets {
+        val commonMain by getting {
+            dependencies {
+                // Compose libraries
+                implementation(compose.material3)
 
-    // Switch out for local development
-    implementation(project(":lighthouse"))
+                implementation(project(":lighthouse"))
+            }
+        }
 
-    // Always points to latest release
-    // implementation("com.ivanempire:lighthouse:2.1.1")
+        val androidMain by getting {
+            dependencies {
+                // Core Android libraries
+                implementation(libs.androidx.core)
+                implementation(libs.androidx.runtime)
+
+                // Compose integration with activities
+                implementation(libs.compose.activity)
+            }
+        }
+
+        val jvmMain by getting {
+            dependencies {
+                implementation(compose.desktop.currentOs)
+            }
+        }
+    }
+}
+
+compose {
+    desktop {
+        application {
+            mainClass = "com.ivanempire.lighthouse.demo.MainKt"
+        }
+    }
 }

@@ -1,32 +1,31 @@
 [versions]
 ktfmt = "0.17.0"
-gradle = "8.3.0"
-maven = "0.26.0"
+agp = "8.3.2"
+maven = "0.29.0"
 junit = "4.13.2"
-kotlin = "1.8.10"
+kotlin = "2.0.0"
 mockito-core = "5.7.0"
-runtime = "2.7.0"
-compose = "1.8.2"
-androidx = "1.12.0"
-coroutines = "1.7.3"
-compose-bom = "2024.02.02"
+lifecycle = "2.8.3"
+androidxActivity = "1.9.0"
+androidxCore = "1.13.1"
+coroutines = "1.8.1"
+jetbrainsCompose = "1.6.11"
 
 [libraries]
 # Core Gradle dependencies
-gradle-android = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
+gradle-android = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 gradle-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 gradle-maven = { module = "com.vanniktech:gradle-maven-publish-plugin", version.ref = "maven" }
 
 # Core Android dependencies
-androidx-core = { module = "androidx.core:core-ktx", version.ref = "androidx" }
-androidx-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "runtime" }
+androidx-core = { module = "androidx.core:core-ktx", version.ref = "androidxCore" }
+androidx-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
 android-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 
 # Jetpack Compose
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 material3 = { module = "androidx.compose.material3:material3" }
-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
-compose-activity = { module = "androidx.activity:activity-compose", version.ref = "compose" }
+compose-activity = { module = "androidx.activity:activity-compose", version.ref = "androidxActivity" }
 
 # Testing dependencies
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito-core" }
@@ -34,3 +33,8 @@ testing-junit = { module = "junit:junit", version.ref = "junit" }
 
 [plugins]
 ktfmt = { id = "com.ncorti.ktfmt.gradle", version.ref = "ktfmt" }
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "jetbrainsCompose" }
