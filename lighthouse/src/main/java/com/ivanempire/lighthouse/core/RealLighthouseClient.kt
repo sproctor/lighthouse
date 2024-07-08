@@ -43,8 +43,11 @@ internal class RealLighthouseClient(
 
         return merge(foundDevicesFlow, lostDevicesFlow)
             .distinctUntilChanged()
+            .onCompletion {
+                logger?.logStatusMessage(TAG, "Discovery stopped")
+                discoveryMutex.withLock { isDiscoveryRunning = false }
+            }
             .flowOn(dispatcher)
-            .onCompletion { discoveryMutex.withLock { isDiscoveryRunning = false } }
     }
 
     private companion object {

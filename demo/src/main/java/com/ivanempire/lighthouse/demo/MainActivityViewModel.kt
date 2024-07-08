@@ -4,10 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ivanempire.lighthouse.LighthouseClient
 import com.ivanempire.lighthouse.models.devices.AbridgedMediaDevice
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
@@ -21,11 +24,15 @@ class MainActivityViewModel(
     val discoveredDevices = backingDiscoveredDevices.asStateFlow()
 
     fun startDiscovery() {
-        discoveryJob =
-            viewModelScope.launch {
-                lighthouseClient.discoverDevices().collect { backingDiscoveredDevices.value = it }
-            }
+        viewModelScope.launch {
+            discoveryJob =
+                lighthouseClient.discoverDevices()
+                    .onEach { backingDiscoveredDevices.value = it }
+                    .launchIn(viewModelScope)
+        }
     }
 
-    fun stopDiscovery() = runBlocking { discoveryJob?.cancelAndJoin() }
+    fun stopDiscovery() {
+        discoveryJob?.cancel()
+    }
 }

@@ -90,7 +90,7 @@ class MainActivity : ComponentActivity() {
                             viewModel.stopDiscovery()
                             isDiscoveryRunning.value = false
                         },
-                        enabled = !isDiscoveryRunning.value
+                        enabled = isDiscoveryRunning.value
                     ) {
                         Text(text = "Stop discovery")
                     }
