@@ -8,7 +8,9 @@ plugins {
 setupLibraryModule(moduleName = "com.ivanempire.lighthouse", shouldBePublished = true)
 
 kotlin {
-    androidTarget()
+    androidTarget {
+        publishLibraryVariants("release")
+    }
     jvm()
 
     sourceSets {

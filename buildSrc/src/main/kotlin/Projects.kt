@@ -7,12 +7,8 @@ import com.vanniktech.maven.publish.MavenPublishBaseExtension
 import com.vanniktech.maven.publish.SonatypeHost
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
-import org.gradle.api.publish.PublishingExtension
-import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.create
-import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
@@ -24,23 +20,26 @@ fun Project.setupLibraryModule(
 ) = setupBaseModule<LibraryExtension>(moduleName) {
     if (shouldBePublished) {
         apply(plugin = "com.vanniktech.maven.publish.base")
-        publishing {
-            singleVariant("release") {
-                withJavadocJar()
-                withSourcesJar()
-            }
-        }
-        afterEvaluate {
-            extensions.configure<PublishingExtension> {
-                publications.create<MavenPublication>("release") {
-                    from(components["release"])
-                    // https://github.com/vanniktech/gradle-maven-publish-plugin/issues/326
-                    val id = project.property("POM_ARTIFACT_ID").toString()
-                    artifactId = artifactId.replace(project.name, id)
-                }
-            }
-        }
+//        publishing {
+//            singleVariant("release") {
+//                withJavadocJar()
+//                withSourcesJar()
+//            }
+//        }
+//        afterEvaluate {
+//            extensions.configure<PublishingExtension> {
+//                publications.create<MavenPublication>("release") {
+//                    from(components["release"])
+//                    // https://github.com/vanniktech/gradle-maven-publish-plugin/issues/326
+//                    val id = project.property("POM_ARTIFACT_ID").toString()
+//                    artifactId = artifactId.replace(project.name, id)
+//                }
+//            }
+//        }
         extensions.configure<MavenPublishBaseExtension> {
+            configure(
+                com.vanniktech.maven.publish.KotlinMultiplatform(javadocJar = com.vanniktech.maven.publish.JavadocJar.Empty())
+            )
             publishToMavenCentral(SonatypeHost.S01, automaticRelease = true)
             signAllPublications()
 
