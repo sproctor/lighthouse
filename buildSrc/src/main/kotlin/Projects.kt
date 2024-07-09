@@ -1,10 +1,7 @@
 package lighthouse
 
-import com.android.build.api.dsl.CommonExtension
-import com.android.build.api.dsl.Lint
 import com.android.build.gradle.BaseExtension
 import com.android.build.gradle.LibraryExtension
-import com.android.build.gradle.TestExtension
 import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import com.vanniktech.maven.publish.MavenPublishBaseExtension
 import com.vanniktech.maven.publish.SonatypeHost
@@ -19,9 +16,7 @@ import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
-/**
- *
- */
+
 fun Project.setupLibraryModule(
     moduleName: String,
     shouldBePublished: Boolean,
@@ -97,6 +92,7 @@ fun Project.setupDemoModule(
         applicationId = name
         versionCode = 1
         versionName = project.versionName
+        targetSdk = project.targetSdk
     }
     buildFeatures {
         compose = true

@@ -4,50 +4,65 @@ import com.ivanempire.lighthouse.LighthouseClient
 import com.ivanempire.lighthouse.LighthouseLogger
 import com.ivanempire.lighthouse.models.devices.AbridgedMediaDevice
 import com.ivanempire.lighthouse.models.search.SearchRequest
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
+import com.ivanempire.lighthouse.parsers.DatagramPacketTransformer
+import com.ivanempire.lighthouse.parsers.packets.MediaPacketParser
+import com.ivanempire.lighthouse.socket.SocketListener
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.merge
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.isActive
 
 /** Specific implementation of [LighthouseClient] */
 internal class RealLighthouseClient(
-    private val discoveryManager: DiscoveryManager,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
-    private val logger: LighthouseLogger? = null,
+    private val socketListener: SocketListener,
+    private val logger: LighthouseLogger?,
 ) : LighthouseClient {
 
-    private val discoveryMutex = Mutex()
-    private var isDiscoveryRunning = false
-
     override suspend fun discoverDevices(
-        searchRequest: SearchRequest
+        searchRequest: SearchRequest,
     ): Flow<List<AbridgedMediaDevice>> {
-        discoveryMutex.withLock {
-            if (isDiscoveryRunning) {
-                throw IllegalStateException(
-                    "Discovery is already in progress - did you call discoverDevices() multiple times?"
-                )
-            }
-            isDiscoveryRunning = true
-        }
+        val state = LighthouseState(logger)
 
         logger?.logStatusMessage(TAG, "Discovering devices with search request: $searchRequest")
 
-        val foundDevicesFlow = discoveryManager.createNewDeviceFlow(searchRequest)
-        val lostDevicesFlow = discoveryManager.createStaleDeviceFlow()
+        val foundDevicesFlow = createNewDeviceFlow(searchRequest, state)
+        val withoutStaleDevicesFlow = createNonStaleDeviceFlow(state)
 
-        return merge(foundDevicesFlow, lostDevicesFlow)
+        return merge(foundDevicesFlow, withoutStaleDevicesFlow)
             .distinctUntilChanged()
-            .onCompletion {
-                logger?.logStatusMessage(TAG, "Discovery stopped")
-                discoveryMutex.withLock { isDiscoveryRunning = false }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private fun createNewDeviceFlow(
+        searchRequest: SearchRequest,
+        lighthouseState: LighthouseState,
+    ): Flow<List<AbridgedMediaDevice>> {
+        return socketListener
+            .listenForPackets(searchRequest)
+            .mapNotNull { DatagramPacketTransformer(it, logger) }
+            .mapNotNull { MediaPacketParser(it, logger) }
+            .onEach { lighthouseState.parseMediaPacket(it) }
+            .flatMapLatest { lighthouseState.deviceList }
+            .filter { it.isNotEmpty() }
+    }
+
+    private fun createNonStaleDeviceFlow(lighthouseState: LighthouseState): Flow<List<AbridgedMediaDevice>> {
+        return flow {
+            while (currentCoroutineContext().isActive) {
+                delay(1000)
+                lighthouseState.removeStaleDevices()
+                emit(lighthouseState.deviceList.value)
             }
-            .flowOn(dispatcher)
+        }
+            .filter { it.isNotEmpty() }
     }
 
     private companion object {

@@ -2,14 +2,11 @@ package com.ivanempire.lighthouse
 
 import android.content.Context
 import android.net.wifi.WifiManager
-import com.ivanempire.lighthouse.core.LighthouseState
-import com.ivanempire.lighthouse.core.RealDiscoveryManager
 import com.ivanempire.lighthouse.core.RealLighthouseClient
 import com.ivanempire.lighthouse.models.Constants.DEFAULT_SEARCH_REQUEST
 import com.ivanempire.lighthouse.models.devices.AbridgedMediaDevice
 import com.ivanempire.lighthouse.models.search.SearchRequest
 import com.ivanempire.lighthouse.socket.RealSocketListener
-import java.lang.IllegalStateException
 import kotlinx.coroutines.flow.Flow
 
 /** The main entrypoint for the Lighthouse library */
@@ -19,8 +16,6 @@ interface LighthouseClient {
     class Builder(context: Context) {
 
         private var retryCount = 1
-
-        private var shouldPersist = false
 
         private var logger: LighthouseLogger? = null
 
@@ -38,8 +33,6 @@ interface LighthouseClient {
             this.retryCount += retryCount
         }
 
-        fun setShouldPersist(shouldPersist: Boolean) = apply { this.shouldPersist = shouldPersist }
-
         /**
          * Specify a custom implementation of [LighthouseLogger] in order to log events from the
          * library at the consumer level
@@ -51,14 +44,10 @@ interface LighthouseClient {
         fun build(): LighthouseClient {
             val socketListener = RealSocketListener(wifiManager, retryCount, logger)
 
-            val discoveryManager =
-                RealDiscoveryManager(
-                    shouldPersist,
-                    LighthouseState(logger),
-                    socketListener,
-                    logger,
-                )
-            return RealLighthouseClient(discoveryManager, logger = logger)
+            return RealLighthouseClient(
+                socketListener = socketListener,
+                logger = logger,
+            )
         }
     }
 
