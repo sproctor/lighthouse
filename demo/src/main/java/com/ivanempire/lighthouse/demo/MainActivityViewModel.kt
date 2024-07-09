@@ -25,7 +25,8 @@ class MainActivityViewModel(
     fun startDiscovery() {
         viewModelScope.launch {
             discoveryJob =
-                lighthouseClient.discoverDevices()
+                lighthouseClient
+                    .discoverDevices()
                     .flowOn(Dispatchers.IO)
                     .onEach { backingDiscoveredDevices.value = it }
                     .launchIn(viewModelScope)
