@@ -9,11 +9,12 @@ fun lighthouseClient(
     context: Context,
     init: LighthouseClient.Builder.() -> Unit = {}
 ): LighthouseClient {
-    val builder = object : LighthouseClient.Builder {
-        override var retryCount = 0
+    val builder =
+        object : LighthouseClient.Builder {
+            override var retryCount = 0
 
-        override var logger: LighthouseLogger? = null
-    }
+            override var logger: LighthouseLogger? = null
+        }
 
     val wifiManager =
         context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager

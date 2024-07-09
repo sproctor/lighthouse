@@ -3,14 +3,13 @@ package com.ivanempire.lighthouse
 import com.ivanempire.lighthouse.core.RealLighthouseClient
 import com.ivanempire.lighthouse.socket.JvmSocketListener
 
-fun lighthouseClient(
-    init: LighthouseClient.Builder.() -> Unit = {}
-): LighthouseClient {
-    val builder = object : LighthouseClient.Builder {
-        override var retryCount = 0
+fun lighthouseClient(init: LighthouseClient.Builder.() -> Unit = {}): LighthouseClient {
+    val builder =
+        object : LighthouseClient.Builder {
+            override var retryCount = 0
 
-        override var logger: LighthouseLogger? = null
-    }
+            override var logger: LighthouseLogger? = null
+        }
 
     builder.init()
 

@@ -3,15 +3,15 @@ package com.ivanempire.lighthouse.socket
 import com.ivanempire.lighthouse.LighthouseLogger
 import com.ivanempire.lighthouse.models.Constants.DEFAULT_MULTICAST_ADDRESS
 import com.ivanempire.lighthouse.models.search.SearchRequest
+import java.net.DatagramPacket
+import java.net.InetAddress
+import java.net.InetSocketAddress
+import java.net.MulticastSocket
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.isActive
-import java.net.DatagramPacket
-import java.net.InetAddress
-import java.net.InetSocketAddress
-import java.net.MulticastSocket
 
 /** Specific implementation of [SocketListener] */
 internal class JvmSocketListener(
@@ -49,20 +49,20 @@ internal class JvmSocketListener(
         val multicastSocket = setupSocket()
 
         return flow {
-            multicastSocket.use {
-                val datagramPacketRequest = searchRequest.toDatagramPacket(multicastGroup)
+                multicastSocket.use {
+                    val datagramPacketRequest = searchRequest.toDatagramPacket(multicastGroup)
 
-                repeat(retryCount + 1) { multicastSocket.send(datagramPacketRequest) }
+                    repeat(retryCount + 1) { multicastSocket.send(datagramPacketRequest) }
 
-                while (currentCoroutineContext().isActive) {
-                    val discoveryBuffer = ByteArray(MULTICAST_DATAGRAM_SIZE)
-                    val discoveryDatagram =
-                        DatagramPacket(discoveryBuffer, discoveryBuffer.size)
-                    it.receive(discoveryDatagram)
-                    emit(discoveryDatagram)
+                    while (currentCoroutineContext().isActive) {
+                        val discoveryBuffer = ByteArray(MULTICAST_DATAGRAM_SIZE)
+                        val discoveryDatagram =
+                            DatagramPacket(discoveryBuffer, discoveryBuffer.size)
+                        it.receive(discoveryDatagram)
+                        emit(discoveryDatagram)
+                    }
                 }
             }
-        }
             .onCompletion { teardownSocket(multicastSocket) }
     }
 

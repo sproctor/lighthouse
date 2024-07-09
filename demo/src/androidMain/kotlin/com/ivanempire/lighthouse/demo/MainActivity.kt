@@ -38,10 +38,11 @@ class MainActivity : ComponentActivity() {
             }
 
         // Setup the client
-        lighthouseClient = lighthouseClient(this) {
-            logger = customLogger
-            retryCount = 2
-        }
+        lighthouseClient =
+            lighthouseClient(this) {
+                logger = customLogger
+                retryCount = 2
+            }
 
         // Skips the need for Dagger in a simple demo app
         val viewModelFactory = MainActivityViewModelFactory(lighthouseClient)

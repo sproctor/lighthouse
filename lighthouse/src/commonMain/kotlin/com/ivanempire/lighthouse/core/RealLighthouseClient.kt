@@ -36,8 +36,7 @@ internal class RealLighthouseClient(
         val foundDevicesFlow = createNewDeviceFlow(searchRequest, state)
         val withoutStaleDevicesFlow = createNonStaleDeviceFlow(state)
 
-        return merge(foundDevicesFlow, withoutStaleDevicesFlow)
-            .distinctUntilChanged()
+        return merge(foundDevicesFlow, withoutStaleDevicesFlow).distinctUntilChanged()
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -54,14 +53,16 @@ internal class RealLighthouseClient(
             .filter { it.isNotEmpty() }
     }
 
-    private fun createNonStaleDeviceFlow(lighthouseState: LighthouseState): Flow<List<AbridgedMediaDevice>> {
+    private fun createNonStaleDeviceFlow(
+        lighthouseState: LighthouseState
+    ): Flow<List<AbridgedMediaDevice>> {
         return flow {
-            while (currentCoroutineContext().isActive) {
-                delay(1000)
-                lighthouseState.removeStaleDevices()
-                emit(lighthouseState.deviceList.value)
+                while (currentCoroutineContext().isActive) {
+                    delay(1000)
+                    lighthouseState.removeStaleDevices()
+                    emit(lighthouseState.deviceList.value)
+                }
             }
-        }
             .filter { it.isNotEmpty() }
     }
 

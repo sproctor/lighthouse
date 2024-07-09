@@ -20,10 +20,7 @@ fun main() {
     var discoveryJob: Job? = null
 
     application {
-        Window(
-            title = "Lighthouse Demo",
-            onCloseRequest = ::exitApplication
-        ) {
+        Window(title = "Lighthouse Demo", onCloseRequest = ::exitApplication) {
             val devicesState = mutableStateOf<List<AbridgedMediaDevice>>(emptyList())
             val scope = rememberCoroutineScope()
 
@@ -31,17 +28,15 @@ fun main() {
                 DeviceList(
                     discoveredDeviceList = devicesState.value,
                     startDiscovery = {
-                        discoveryJob = scope.launch {
-                            lighthouseClient.discoverDevices()
-                                .flowOn(Dispatchers.IO)
-                                .collect { devices ->
+                        discoveryJob =
+                            scope.launch {
+                                lighthouseClient.discoverDevices().flowOn(Dispatchers.IO).collect {
+                                    devices ->
                                     devicesState.value = devices.sortedBy { it.uuid }
                                 }
-                        }
+                            }
                     },
-                    stopDiscovery = {
-                        discoveryJob?.cancel()
-                    }
+                    stopDiscovery = { discoveryJob?.cancel() }
                 )
             }
         }

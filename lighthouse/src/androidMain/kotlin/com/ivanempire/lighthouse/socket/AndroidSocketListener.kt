@@ -59,20 +59,20 @@ internal class AndroidSocketListener(
         val multicastSocket = setupSocket()
 
         return flow {
-            multicastSocket.use {
-                val datagramPacketRequest = searchRequest.toDatagramPacket(multicastGroup)
+                multicastSocket.use {
+                    val datagramPacketRequest = searchRequest.toDatagramPacket(multicastGroup)
 
-                repeat(retryCount + 1) { multicastSocket.send(datagramPacketRequest) }
+                    repeat(retryCount + 1) { multicastSocket.send(datagramPacketRequest) }
 
-                while (currentCoroutineContext().isActive) {
-                    val discoveryBuffer = ByteArray(MULTICAST_DATAGRAM_SIZE)
-                    val discoveryDatagram =
-                        DatagramPacket(discoveryBuffer, discoveryBuffer.size)
-                    it.receive(discoveryDatagram)
-                    emit(discoveryDatagram)
+                    while (currentCoroutineContext().isActive) {
+                        val discoveryBuffer = ByteArray(MULTICAST_DATAGRAM_SIZE)
+                        val discoveryDatagram =
+                            DatagramPacket(discoveryBuffer, discoveryBuffer.size)
+                        it.receive(discoveryDatagram)
+                        emit(discoveryDatagram)
+                    }
                 }
             }
-        }
             .onCompletion { teardownSocket(multicastSocket) }
     }
 

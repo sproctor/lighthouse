@@ -190,9 +190,8 @@ internal class LighthouseState(private val logger: LighthouseLogger? = null) {
     }
 
     /**
-     * Iterates over the entire device list and removes any stale devices. A stale device is
-     * defined as one that has not seen a media packet in the last [AbridgedMediaDevice.cache]
-     * seconds
+     * Iterates over the entire device list and removes any stale devices. A stale device is defined
+     * as one that has not seen a media packet in the last [AbridgedMediaDevice.cache] seconds
      *
      * @return A device list with stale root devices removed
      */
