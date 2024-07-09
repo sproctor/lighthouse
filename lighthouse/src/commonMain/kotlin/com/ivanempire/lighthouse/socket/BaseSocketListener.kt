@@ -3,6 +3,10 @@ package com.ivanempire.lighthouse.socket
 import com.ivanempire.lighthouse.LighthouseLogger
 import com.ivanempire.lighthouse.models.Constants.DEFAULT_MULTICAST_ADDRESS
 import com.ivanempire.lighthouse.models.search.SearchRequest
+import java.net.DatagramPacket
+import java.net.InetAddress
+import java.net.InetSocketAddress
+import java.net.MulticastSocket
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.Flow
@@ -11,10 +15,6 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.isActive
-import java.net.DatagramPacket
-import java.net.InetAddress
-import java.net.InetSocketAddress
-import java.net.MulticastSocket
 
 /** Specific implementation of [SocketListener] */
 internal abstract class BaseSocketListener(
@@ -66,18 +66,13 @@ internal abstract class BaseSocketListener(
 
                 while (currentCoroutineContext().isActive && !multicastSocket.isClosed) {
                     val discoveryBuffer = ByteArray(MULTICAST_DATAGRAM_SIZE)
-                    val discoveryDatagram =
-                        DatagramPacket(discoveryBuffer, discoveryBuffer.size)
+                    val discoveryDatagram = DatagramPacket(discoveryBuffer, discoveryBuffer.size)
                     multicastSocket.receive(discoveryDatagram)
                     emit(discoveryDatagram)
                 }
             }
-            .catch { cause ->
-                logger?.logErrorMessage(TAG, "", cause)
-            }
-            .onCompletion {
-                teardownSocket(multicastSocket)
-            }
+            .catch { cause -> logger?.logErrorMessage(TAG, "", cause) }
+            .onCompletion { teardownSocket(multicastSocket) }
             .flowOn(Dispatchers.IO)
     }
 
