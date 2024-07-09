@@ -25,10 +25,6 @@ internal class LighthouseState(private val logger: LighthouseLogger? = null) {
     private val backingDeviceList = MutableStateFlow<List<AbridgedMediaDevice>>(emptyList())
     val deviceList: StateFlow<List<AbridgedMediaDevice>> = backingDeviceList.asStateFlow()
 
-    fun resetDeviceList() {
-        backingDeviceList.value = emptyList()
-    }
-
     /**
      * Delegates all the latest incoming [MediaPacket] instances to the relevant parsing methods
      *

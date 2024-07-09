@@ -1,7 +1,5 @@
 package com.ivanempire.lighthouse
 
-import com.ivanempire.lighthouse.core.LighthouseState
-import com.ivanempire.lighthouse.core.RealDiscoveryManager
 import com.ivanempire.lighthouse.core.RealLighthouseClient
 import com.ivanempire.lighthouse.socket.JvmSocketListener
 
@@ -10,8 +8,6 @@ fun lighthouseClient(
 ): LighthouseClient {
     val builder = object : LighthouseClient.Builder {
         override var retryCount = 0
-
-        override var shouldPersist = false
 
         override var logger: LighthouseLogger? = null
     }
@@ -22,12 +18,5 @@ fun lighthouseClient(
 
     val socketListener = JvmSocketListener(builder.retryCount, builder.logger)
 
-    val discoveryManager =
-        RealDiscoveryManager(
-            builder.shouldPersist,
-            LighthouseState(builder.logger),
-            socketListener,
-            builder.logger,
-        )
-    return RealLighthouseClient(discoveryManager, logger = builder.logger)
+    return RealLighthouseClient(socketListener, logger = builder.logger)
 }

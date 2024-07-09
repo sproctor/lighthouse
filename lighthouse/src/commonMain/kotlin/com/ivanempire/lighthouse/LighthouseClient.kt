@@ -18,8 +18,6 @@ interface LighthouseClient {
          */
         var retryCount: Int
 
-        var shouldPersist: Boolean
-
         /**
          * Specify a custom implementation of [LighthouseLogger] in order to log events from the
          * library at the consumer level
