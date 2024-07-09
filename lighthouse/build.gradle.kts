@@ -22,10 +22,12 @@ kotlin {
                 implementation(libs.androidx.core)
             }
         }
+        val androidUnitTest by getting {
+            dependencies {
+                implementation(libs.mockito.core)
+                implementation(libs.testing.junit)
+                implementation(libs.kotlinx.coroutines.test)
+            }
+        }
     }
 }
-//dependencies {
-//    testImplementation(libs.mockito.core)
-//    testImplementation(libs.testing.junit)
-//    testImplementation(libs.kotlinx.coroutines.test)
-//}
