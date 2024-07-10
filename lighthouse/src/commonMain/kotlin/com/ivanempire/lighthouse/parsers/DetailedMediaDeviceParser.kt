@@ -10,9 +10,7 @@ import nl.adaptivity.xmlutil.serialization.XML
 object DetailedMediaDeviceParser {
     @OptIn(ExperimentalXmlUtilApi::class)
     private val xml = XML {
-        defaultPolicy {
-            unknownChildHandler = UnknownChildHandler { _, _, _, _, _ -> emptyList() }
-        }
+        defaultPolicy { unknownChildHandler = UnknownChildHandler { _, _, _, _, _ -> emptyList() } }
     }
 
     private val serializer = serializer<RootContainer>()

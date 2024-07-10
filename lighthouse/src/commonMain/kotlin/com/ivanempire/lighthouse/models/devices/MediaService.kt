@@ -7,7 +7,8 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
 /**
  * Represents a service that a media device supports
  *
- * @property serviceType The service type that is obtained from SSDP packets or from the XML endpoint
+ * @property serviceType The service type that is obtained from SSDP packets or from the XML
+ *   endpoint
  */
 interface MediaService {
     val serviceType: String
@@ -25,10 +26,8 @@ interface MediaService {
 @Serializable
 @XmlSerialName("service", "urn:schemas-upnp-org:device-1-0", "")
 data class DetailedEmbeddedMediaService(
-    @XmlElement(true)
-    override val serviceType: String,
-    @XmlElement(true)
-    val serviceId: String,
+    @XmlElement(true) override val serviceType: String,
+    @XmlElement(true) val serviceId: String,
     @XmlElement(true)
     @XmlSerialName("SCPDURL", "urn:schemas-upnp-org:device-1-0", "")
     val descriptionUrl: String,

@@ -7,10 +7,8 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
 @Serializable
 @XmlSerialName("root", "urn:schemas-upnp-org:device-1-0", "")
 data class RootContainer(
-    @XmlElement(true)
-    val specVersion: SpecVersion,
-    @XmlElement(true)
-    val device: DetailedMediaDevice,
+    @XmlElement(true) val specVersion: SpecVersion,
+    @XmlElement(true) val device: DetailedMediaDevice,
     @XmlElement(true)
     @XmlSerialName("URLBase", "urn:schemas-upnp-org:device-1-0", "")
     val urlBase: String?,
@@ -19,8 +17,6 @@ data class RootContainer(
 @Serializable
 @XmlSerialName("specVersion", "urn:schemas-upnp-org:device-1-0", "")
 data class SpecVersion(
-    @XmlElement(true)
-    val major: Int,
-    @XmlElement(true)
-    val minor: Int,
+    @XmlElement(true) val major: Int,
+    @XmlElement(true) val minor: Int,
 )

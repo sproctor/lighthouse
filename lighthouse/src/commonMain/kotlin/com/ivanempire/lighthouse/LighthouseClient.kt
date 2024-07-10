@@ -28,9 +28,7 @@ interface LighthouseClient {
          */
         var logger: LighthouseLogger?
 
-        /**
-         * @property httpClient [HttpClient] to use in [retrieveDescription]
-         */
+        /** @property httpClient [HttpClient] to use in [retrieveDescription] */
         var httpClient: HttpClient
     }
 
@@ -45,5 +43,7 @@ interface LighthouseClient {
         searchRequest: SearchRequest = DEFAULT_SEARCH_REQUEST
     ): Flow<List<AbridgedMediaDevice>>
 
-    suspend fun retrieveDescription(abridgedMediaDevice: AbridgedMediaDevice): Result<DetailedMediaDevice>
+    suspend fun retrieveDescription(
+        abridgedMediaDevice: AbridgedMediaDevice
+    ): Result<DetailedMediaDevice>
 }

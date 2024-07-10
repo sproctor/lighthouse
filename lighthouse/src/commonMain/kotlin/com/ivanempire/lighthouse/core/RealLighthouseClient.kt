@@ -44,7 +44,9 @@ internal class RealLighthouseClient(
         return merge(foundDevicesFlow, withoutStaleDevicesFlow).distinctUntilChanged()
     }
 
-    override suspend fun retrieveDescription(abridgedMediaDevice: AbridgedMediaDevice): Result<DetailedMediaDevice> {
+    override suspend fun retrieveDescription(
+        abridgedMediaDevice: AbridgedMediaDevice
+    ): Result<DetailedMediaDevice> {
         return try {
             // TODO: use secure location if it is provided
             val response = httpClient.get(abridgedMediaDevice.location)

@@ -36,15 +36,12 @@ fun DeviceList(
 
     if (showMediaDevice != null) {
         var result by remember { mutableStateOf<Result<DetailedMediaDevice>?>(null) }
-        Column(
-            modifier = Modifier.verticalScroll(state = rememberScrollState())
-        ) {
+        Column(modifier = Modifier.verticalScroll(state = rememberScrollState())) {
             when {
                 result == null -> Text("Loading...")
                 result?.isSuccess == true -> {
                     DisplayMediaDevice(result!!.getOrThrow())
                 }
-
                 result?.isFailure == true -> {
                     Text(
                         "Fetching details failed: ${
@@ -53,15 +50,9 @@ fun DeviceList(
                     )
                 }
             }
-            Button(
-                onClick = { showMediaDevice = null }
-            ) {
-                Text("Back")
-            }
+            Button(onClick = { showMediaDevice = null }) { Text("Back") }
         }
-        LaunchedEffect(showMediaDevice) {
-            result = getDetails(showMediaDevice!!)
-        }
+        LaunchedEffect(showMediaDevice) { result = getDetails(showMediaDevice!!) }
     } else {
         var currentTime by remember { mutableStateOf(System.currentTimeMillis()) }
         LaunchedEffect(Unit) {
@@ -131,9 +122,7 @@ private fun DeviceListItem(
 }
 
 @Composable
-private fun DisplayMediaDevice(
-    detailedMediaDevice: DetailedMediaDevice
-) {
+private fun DisplayMediaDevice(detailedMediaDevice: DetailedMediaDevice) {
     Column {
         Text("device type: ${detailedMediaDevice.deviceType}")
         Text("friendly name: ${detailedMediaDevice.friendlyName}")

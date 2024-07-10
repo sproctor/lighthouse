@@ -3,12 +3,11 @@ package com.ivanempire.lighthouse.models.devices
 import com.ivanempire.lighthouse.models.packets.EmbeddedDevice
 import com.ivanempire.lighthouse.models.packets.EmbeddedService
 import com.ivanempire.lighthouse.models.packets.MediaHost
+import java.net.URL
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlChildrenName
 import nl.adaptivity.xmlutil.serialization.XmlElement
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
-import java.net.URL
-import java.util.UUID
 
 /**
  * Base class for a media device that will be built by Lighthouse from discovery information: either
@@ -62,32 +61,21 @@ data class AbridgedMediaDevice(
 @Serializable
 @XmlSerialName("device", "urn:schemas-upnp-org:device-1-0", "")
 data class DetailedMediaDevice(
-    @XmlElement(true)
-    val deviceType: String,
-    @XmlElement(true)
-    val friendlyName: String,
-    @XmlElement(true)
-    val manufacturer: String,
+    @XmlElement(true) val deviceType: String,
+    @XmlElement(true) val friendlyName: String,
+    @XmlElement(true) val manufacturer: String,
     @XmlElement(true)
     @XmlSerialName("manufacturerURL", "urn:schemas-upnp-org:device-1-0", "")
     val manufacturerUrl: String?,
-    @XmlElement(true)
-    val modelDescription: String?,
-    @XmlElement(true)
-    val modelName: String,
-    @XmlElement(true)
-    val modelNumber: String?,
+    @XmlElement(true) val modelDescription: String?,
+    @XmlElement(true) val modelName: String,
+    @XmlElement(true) val modelNumber: String?,
     @XmlElement(true)
     @XmlSerialName("modelURL", "urn:schemas-upnp-org:device-1-0", "")
     val modelUrl: String?,
-    @XmlElement(true)
-    val serialNumber: String?,
-    @XmlElement(true)
-    @XmlSerialName("UDN", "urn:schemas-upnp-org:device-1-0", "")
-    val udn: String,
-    @XmlElement(true)
-    @XmlSerialName("UPC", "urn:schemas-upnp-org:device-1-0", "")
-    val upc: String?,
+    @XmlElement(true) val serialNumber: String?,
+    @XmlElement(true) @XmlSerialName("UDN", "urn:schemas-upnp-org:device-1-0", "") val udn: String,
+    @XmlElement(true) @XmlSerialName("UPC", "urn:schemas-upnp-org:device-1-0", "") val upc: String?,
     @XmlElement(true)
     @XmlSerialName("iconList", "urn:schemas-upnp-org:device-1-0", "")
     @XmlChildrenName("icon", "urn:schemas-upnp-org:device-1-0", "")

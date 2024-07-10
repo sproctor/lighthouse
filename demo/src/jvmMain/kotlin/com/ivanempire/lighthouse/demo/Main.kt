@@ -30,16 +30,14 @@ fun main() {
                     startDiscovery = {
                         discoveryJob =
                             scope.launch {
-                                lighthouseClient.discoverDevices().flowOn(Dispatchers.IO)
-                                    .collect { devices ->
-                                        devicesState.value = devices.sortedBy { it.uuid }
-                                    }
+                                lighthouseClient.discoverDevices().flowOn(Dispatchers.IO).collect {
+                                    devices ->
+                                    devicesState.value = devices.sortedBy { it.uuid }
+                                }
                             }
                     },
                     stopDiscovery = { discoveryJob?.cancel() },
-                    getDetails = {
-                        lighthouseClient.retrieveDescription(it)
-                    },
+                    getDetails = { lighthouseClient.retrieveDescription(it) },
                 )
             }
         }

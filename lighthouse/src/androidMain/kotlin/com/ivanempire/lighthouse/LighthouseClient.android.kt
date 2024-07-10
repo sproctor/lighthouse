@@ -5,7 +5,6 @@ import android.net.wifi.WifiManager
 import com.ivanempire.lighthouse.core.RealLighthouseClient
 import com.ivanempire.lighthouse.socket.AndroidSocketListener
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.okhttp.OkHttp
 
 fun lighthouseClient(
     context: Context,
