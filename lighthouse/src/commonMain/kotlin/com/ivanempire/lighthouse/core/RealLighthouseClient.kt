@@ -28,11 +28,9 @@ import kotlinx.coroutines.isActive
 /** Specific implementation of [LighthouseClient] */
 internal class RealLighthouseClient(
     private val socketListener: SocketListener,
+    private val httpClient: HttpClient,
     private val logger: LighthouseLogger?,
 ) : LighthouseClient {
-
-    private val httpClient = HttpClient()
-
     override suspend fun discoverDevices(
         searchRequest: SearchRequest,
     ): Flow<List<AbridgedMediaDevice>> {

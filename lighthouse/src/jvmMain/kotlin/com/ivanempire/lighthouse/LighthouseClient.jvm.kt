@@ -2,6 +2,7 @@ package com.ivanempire.lighthouse
 
 import com.ivanempire.lighthouse.core.RealLighthouseClient
 import com.ivanempire.lighthouse.socket.JvmSocketListener
+import io.ktor.client.HttpClient
 
 fun lighthouseClient(init: LighthouseClient.Builder.() -> Unit = {}): LighthouseClient {
     val builder =
@@ -9,6 +10,8 @@ fun lighthouseClient(init: LighthouseClient.Builder.() -> Unit = {}): Lighthouse
             override var retryCount = 0
 
             override var logger: LighthouseLogger? = null
+
+            override var httpClient: HttpClient = HttpClient()
         }
 
     builder.init()
@@ -17,5 +20,9 @@ fun lighthouseClient(init: LighthouseClient.Builder.() -> Unit = {}): Lighthouse
 
     val socketListener = JvmSocketListener(builder.retryCount, builder.logger)
 
-    return RealLighthouseClient(socketListener, logger = builder.logger)
+    return RealLighthouseClient(
+        socketListener = socketListener,
+        httpClient = builder.httpClient,
+        logger = builder.logger,
+    )
 }

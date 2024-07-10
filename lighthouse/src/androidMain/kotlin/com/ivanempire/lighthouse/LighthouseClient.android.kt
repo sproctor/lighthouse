@@ -4,6 +4,8 @@ import android.content.Context
 import android.net.wifi.WifiManager
 import com.ivanempire.lighthouse.core.RealLighthouseClient
 import com.ivanempire.lighthouse.socket.AndroidSocketListener
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.okhttp.OkHttp
 
 fun lighthouseClient(
     context: Context,
@@ -14,6 +16,8 @@ fun lighthouseClient(
             override var retryCount = 0
 
             override var logger: LighthouseLogger? = null
+
+            override var httpClient: HttpClient = HttpClient()
         }
 
     val wifiManager =
@@ -25,5 +29,9 @@ fun lighthouseClient(
 
     val socketListener = AndroidSocketListener(wifiManager, builder.retryCount, builder.logger)
 
-    return RealLighthouseClient(socketListener, logger = builder.logger)
+    return RealLighthouseClient(
+        socketListener = socketListener,
+        httpClient = builder.httpClient,
+        logger = builder.logger,
+    )
 }

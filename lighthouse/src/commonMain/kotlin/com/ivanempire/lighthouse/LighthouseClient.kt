@@ -4,6 +4,7 @@ import com.ivanempire.lighthouse.models.Constants.DEFAULT_SEARCH_REQUEST
 import com.ivanempire.lighthouse.models.devices.AbridgedMediaDevice
 import com.ivanempire.lighthouse.models.devices.DetailedMediaDevice
 import com.ivanempire.lighthouse.models.search.SearchRequest
+import io.ktor.client.HttpClient
 import kotlinx.coroutines.flow.Flow
 
 /** The main entrypoint for the Lighthouse library */
@@ -15,7 +16,7 @@ interface LighthouseClient {
          * Specify a retry count in the off-chance the network packet is not received by the
          * multicast group due to the nature of UDP
          *
-         * @param retryCount Number of times to retry sending an SSDP search packet, must be > 0
+         * @property retryCount Number of times to retry sending an SSDP search packet, must be > 0
          */
         var retryCount: Int
 
@@ -23,9 +24,14 @@ interface LighthouseClient {
          * Specify a custom implementation of [LighthouseLogger] in order to log events from the
          * library at the consumer level
          *
-         * @param logger Custom implementation of [LighthouseLogger]
+         * @property logger Custom implementation of [LighthouseLogger]
          */
         var logger: LighthouseLogger?
+
+        /**
+         * @property httpClient [HttpClient] to use in [retrieveDescription]
+         */
+        var httpClient: HttpClient
     }
 
     /**
