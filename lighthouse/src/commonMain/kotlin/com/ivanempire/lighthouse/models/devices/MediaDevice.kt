@@ -3,6 +3,10 @@ package com.ivanempire.lighthouse.models.devices
 import com.ivanempire.lighthouse.models.packets.EmbeddedDevice
 import com.ivanempire.lighthouse.models.packets.EmbeddedService
 import com.ivanempire.lighthouse.models.packets.MediaHost
+import kotlinx.serialization.Serializable
+import nl.adaptivity.xmlutil.serialization.XmlChildrenName
+import nl.adaptivity.xmlutil.serialization.XmlElement
+import nl.adaptivity.xmlutil.serialization.XmlSerialName
 import java.net.URL
 import java.util.UUID
 
@@ -29,7 +33,7 @@ data class AbridgedMediaDevice(
     val bootId: Int?,
     val configId: Int?,
     val searchPort: Int?,
-    val location: URL?,
+    val location: URL,
     val secureLocation: URL?,
     val mediaDeviceServer: MediaDeviceServer?,
     val serviceList: List<EmbeddedService> = listOf(),
@@ -55,90 +59,48 @@ data class AbridgedMediaDevice(
  * @param udn The unique device name ==> UUID or string
  * @param serviceList The list of services supported by the root OR embedded device
  */
-open class DetailedMediaDevice(
-    open val deviceType: String,
-    open val friendlyName: String,
-    open val manufacturer: String,
-    open val manufacturerURL: URL,
-    open val modelDescription: String,
-    open val modelName: String,
-    open val modelNumber: String,
-    open val modelUrl: URL,
-    open val serialNumber: String,
-    open val udn: UUID,
-    open val serviceList: List<DetailedEmbeddedMediaService>?,
-) : MediaDevice()
-
-/**
- * The root media device, populated when an [AbridgedMediaDevice] calls the XML description endpoint
- * to get complete information about itself. Contains all of the information obtained from the XML
- * information in a parsed format. All fields are identical to ones described in the
- * [DetailedEmbeddedMediaService], except for two.
- *
- * @param deviceList The list of embedded devices found on this root device
- * @param presentationUrl The presentation URL of this root device
- */
-data class RootMediaDevice(
-    override val deviceType: String,
-    override val friendlyName: String,
-    override val manufacturer: String,
-    override val manufacturerURL: URL,
-    override val modelDescription: String,
-    override val modelName: String,
-    override val modelNumber: String,
-    override val modelUrl: URL,
-    override val serialNumber: String,
-    override val udn: UUID,
-    override val serviceList: List<DetailedEmbeddedMediaService>?,
-    val deviceList: List<DetailedEmbeddedMediaDevice>?,
-    val presentationUrl: URL?,
-) :
-    DetailedMediaDevice(
-        deviceType,
-        friendlyName,
-        manufacturer,
-        manufacturerURL,
-        modelDescription,
-        modelName,
-        modelNumber,
-        modelUrl,
-        serialNumber,
-        udn,
-        serviceList,
-    )
-
-/**
- * The embedded media device, populated when an [AbridgedMediaDevice] calls the XML description
- * endpoint to get complete information about itself. Contains all of the information obtained from
- * the XML information in a parsed format. All fields are identical to ones described in the
- * [DetailedEmbeddedMediaService], except for one.
- *
- * @param upc Universal product code
- */
-data class DetailedEmbeddedMediaDevice(
-    override val deviceType: String,
-    override val friendlyName: String,
-    override val manufacturer: String,
-    override val manufacturerURL: URL,
-    override val modelDescription: String,
-    override val modelName: String,
-    override val modelNumber: String,
-    override val modelUrl: URL,
-    override val serialNumber: String,
-    override val udn: UUID,
+@Serializable
+@XmlSerialName("device", "urn:schemas-upnp-org:device-1-0", "")
+data class DetailedMediaDevice(
+    @XmlElement(true)
+    val deviceType: String,
+    @XmlElement(true)
+    val friendlyName: String,
+    @XmlElement(true)
+    val manufacturer: String,
+    @XmlElement(true)
+    @XmlSerialName("manufacturerURL", "urn:schemas-upnp-org:device-1-0", "")
+    val manufacturerUrl: String?,
+    @XmlElement(true)
+    val modelDescription: String?,
+    @XmlElement(true)
+    val modelName: String,
+    @XmlElement(true)
+    val modelNumber: String?,
+    @XmlElement(true)
+    @XmlSerialName("modelURL", "urn:schemas-upnp-org:device-1-0", "")
+    val modelUrl: String?,
+    @XmlElement(true)
+    val serialNumber: String?,
+    @XmlElement(true)
+    @XmlSerialName("UDN", "urn:schemas-upnp-org:device-1-0", "")
+    val udn: String,
+    @XmlElement(true)
+    @XmlSerialName("UPC", "urn:schemas-upnp-org:device-1-0", "")
     val upc: Int?,
-    override val serviceList: List<DetailedEmbeddedMediaService>?,
-) :
-    DetailedMediaDevice(
-        deviceType,
-        friendlyName,
-        manufacturer,
-        manufacturerURL,
-        modelDescription,
-        modelName,
-        modelNumber,
-        modelUrl,
-        serialNumber,
-        udn,
-        serviceList,
-    )
+    @XmlElement(true)
+    @XmlSerialName("iconList", "urn:schemas-upnp-org:device-1-0", "")
+    @XmlChildrenName("icon", "urn:schemas-upnp-org:device-1-0", "")
+    val iconList: List<MediaIcon>?,
+    @XmlElement(true)
+    @XmlSerialName("serviceList", "urn:schemas-upnp-org:device-1-0", "")
+    @XmlChildrenName("service", "urn:schemas-upnp-org:device-1-0", "")
+    val serviceList: List<DetailedEmbeddedMediaService>?,
+    @XmlElement(true)
+    @XmlSerialName("deviceList", "urn:schemas-upnp-org:device-1-0", "")
+    @XmlChildrenName("device", "urn:schemas-upnp-org:device-1-0", "")
+    val deviceList: List<DetailedMediaDevice>?,
+    @XmlElement(true)
+    @XmlSerialName("presentationURL", "urn:schemas-upnp-org:device-1-0", "")
+    val presentationUrl: String?,
+)

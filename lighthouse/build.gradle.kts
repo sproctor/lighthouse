@@ -3,6 +3,7 @@ import lighthouse.setupLibraryModule
 plugins {
     id(libs.plugins.android.library.get().pluginId)
     id(libs.plugins.kotlin.multiplatform.get().pluginId)
+    alias(libs.plugins.serialization)
 }
 
 setupLibraryModule(moduleName = "com.ivanempire.lighthouse", shouldBePublished = true)
@@ -16,7 +17,10 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(libs.android.coroutines)
+                implementation(libs.coroutines.core)
+                implementation(libs.ktor.client.core)
+                implementation(libs.ktor.client.okhttp)
+                implementation(libs.xmlutil.serialization)
             }
         }
         val androidMain by getting {

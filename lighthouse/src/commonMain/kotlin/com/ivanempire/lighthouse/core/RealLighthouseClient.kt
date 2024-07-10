@@ -3,10 +3,15 @@ package com.ivanempire.lighthouse.core
 import com.ivanempire.lighthouse.LighthouseClient
 import com.ivanempire.lighthouse.LighthouseLogger
 import com.ivanempire.lighthouse.models.devices.AbridgedMediaDevice
+import com.ivanempire.lighthouse.models.devices.DetailedMediaDevice
 import com.ivanempire.lighthouse.models.search.SearchRequest
 import com.ivanempire.lighthouse.parsers.DatagramPacketTransformer
+import com.ivanempire.lighthouse.parsers.DetailedMediaDeviceParser
 import com.ivanempire.lighthouse.parsers.packets.MediaPacketParser
 import com.ivanempire.lighthouse.socket.SocketListener
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.get
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
@@ -26,6 +31,8 @@ internal class RealLighthouseClient(
     private val logger: LighthouseLogger?,
 ) : LighthouseClient {
 
+    private val httpClient = HttpClient()
+
     override suspend fun discoverDevices(
         searchRequest: SearchRequest,
     ): Flow<List<AbridgedMediaDevice>> {
@@ -37,6 +44,16 @@ internal class RealLighthouseClient(
         val withoutStaleDevicesFlow = createNonStaleDeviceFlow(state)
 
         return merge(foundDevicesFlow, withoutStaleDevicesFlow).distinctUntilChanged()
+    }
+
+    override suspend fun retrieveDescription(abridgedMediaDevice: AbridgedMediaDevice): Result<DetailedMediaDevice> {
+        return try {
+            // TODO: use secure location if it is provided
+            val response = httpClient.get(abridgedMediaDevice.location)
+            Result.success(DetailedMediaDeviceParser.parse(response.body()))
+        } catch (e: Throwable) {
+            Result.failure(e)
+        }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
