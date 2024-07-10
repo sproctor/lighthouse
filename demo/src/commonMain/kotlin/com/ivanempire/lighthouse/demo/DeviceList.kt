@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
@@ -34,14 +36,27 @@ fun DeviceList(
 
     if (showMediaDevice != null) {
         var result by remember { mutableStateOf<Result<DetailedMediaDevice>?>(null) }
-        when {
-            result == null -> Text("Loading...")
-            result?.isSuccess == true -> {
-                DisplayMediaDevice(result!!.getOrThrow())
-            }
+        Column(
+            modifier = Modifier.verticalScroll(state = rememberScrollState())
+        ) {
+            when {
+                result == null -> Text("Loading...")
+                result?.isSuccess == true -> {
+                    DisplayMediaDevice(result!!.getOrThrow())
+                }
 
-            result?.isFailure == true -> {
-                Text("Fetching details failed")
+                result?.isFailure == true -> {
+                    Text(
+                        "Fetching details failed: ${
+                            result?.exceptionOrNull()?.stackTraceToString()
+                        }"
+                    )
+                }
+            }
+            Button(
+                onClick = { showMediaDevice = null }
+            ) {
+                Text("Back")
             }
         }
         LaunchedEffect(showMediaDevice) {
