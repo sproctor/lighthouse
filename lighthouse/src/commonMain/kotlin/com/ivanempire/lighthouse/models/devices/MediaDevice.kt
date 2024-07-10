@@ -87,7 +87,7 @@ data class DetailedMediaDevice(
     val udn: String,
     @XmlElement(true)
     @XmlSerialName("UPC", "urn:schemas-upnp-org:device-1-0", "")
-    val upc: Int?,
+    val upc: String?,
     @XmlElement(true)
     @XmlSerialName("iconList", "urn:schemas-upnp-org:device-1-0", "")
     @XmlChildrenName("icon", "urn:schemas-upnp-org:device-1-0", "")

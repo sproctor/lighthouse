@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+<root xmlns="urn:schemas-upnp-org:device-1-0"
+    xmlns:pnpx="http://schemas.microsoft.com/windows/pnpx/2005/11"
+    xmlns:df="http://schemas.microsoft.com/windows/2008/09/devicefoundation">
+    <specVersion>
+        <major>1</major>
+        <minor>0</minor>
+    </specVersion>
+    <device>
+        <pnpx:X_hardwareId>VEN_01f2&amp;DEV_000b&amp;REV_05 VEN_01f2&amp;DEV_8000&amp;SUBSYS_01&amp;REV_01 VEN_01f2&amp;DEV_8000&amp;REV_01 VEN_0033&amp;DEV_0008&amp;REV_01</pnpx:X_hardwareId>
+        <pnpx:X_deviceCategory>NetworkInfrastructure.Router</pnpx:X_deviceCategory>
+        <df:X_deviceCategory>Network.Router.Wireless</df:X_deviceCategory>
+        <df:X_modelId>undefined</df:X_modelId>
+        <deviceType>urn:schemas-upnp-org:device:InternetGatewayDevice:1</deviceType>
+        <friendlyName>R6230 (Gateway)</friendlyName>
+        <manufacturer>NETGEAR </manufacturer>
+        <manufacturerURL>http://www.netgear.com/</manufacturerURL>
+        <modelDescription>NETGEAR R6230 Router</modelDescription>
+        <modelName>NETGEAR R6230 Router</modelName>
+        <modelNumber>R6230</modelNumber>
+        <modelURL>http://www.netgear.com/</modelURL>
+        <serialNumber>51Y58ABE0007E</serialNumber>
+        <UDN>uuid:824ff22b-8c7d-41c5-a131-78d29484ac56</UDN>
+        <serviceList>
+            <service>
+                <serviceType>urn:schemas-upnp-org:service:Layer3Forwarding:1</serviceType>
+                <serviceId>urn:upnp-org:serviceId:L3Forwarding1</serviceId>
+                <controlURL>/ctl/L3F</controlURL>
+                <eventSubURL>/evt/L3F</eventSubURL>
+                <SCPDURL>/L3F.xml</SCPDURL>
+            </service>
+        </serviceList>
+        <deviceList>
+            <device>
+                <deviceType>urn:schemas-upnp-org:device:WANDevice:1</deviceType>
+                <friendlyName>WANDevice</friendlyName>
+                <manufacturer>NETGEAR</manufacturer>
+                <manufacturerURL>http://www.netgear.com/</manufacturerURL>
+                <modelDescription>WAN Device</modelDescription>
+                <modelName>WAN Device</modelName>
+                <modelNumber>20070827</modelNumber>
+                <modelURL>http://www.netgear.com/</modelURL>
+                <serialNumber>51Y58ABE0007E</serialNumber>
+                <UDN>uuid:824ff22b-8c7d-41c5-a131-78d29484ac57</UDN>
+                <UPC>R6230</UPC>
+                <serviceList>
+                    <service>
+                        <serviceType>urn:schemas-upnp-org:service:WANCommonInterfaceConfig:1</serviceType>
+                        <serviceId>urn:upnp-org:serviceId:WANCommonIFC1</serviceId>
+                        <controlURL>/ctl/CmnIfCfg</controlURL>
+                        <eventSubURL>/evt/CmnIfCfg</eventSubURL>
+                        <SCPDURL>/WANCfg.xml</SCPDURL>
+                    </service>
+                </serviceList>
+                <deviceList>
+                    <device>
+                        <deviceType>urn:schemas-upnp-org:device:WANConnectionDevice:1</deviceType>
+                        <friendlyName>WANConnectionDevice</friendlyName>
+                        <manufacturer>NETGEAR</manufacturer>
+                        <manufacturerURL>http://www.netgear.com/</manufacturerURL>
+                        <modelDescription>Residential Gateway</modelDescription>
+                        <modelName>R6230</modelName>
+                        <modelNumber>20070827</modelNumber>
+                        <modelURL>http://www.netgear.com/</modelURL>
+                        <serialNumber>51Y58ABE0007E</serialNumber>
+                        <UDN>uuid:824ff22b-8c7d-41c5-a131-78d29484ac58</UDN>
+                        <UPC>R6230</UPC>
+                        <serviceList>
+                            <service>
+                                <serviceType>urn:schemas-upnp-org:service:WANEthernetLinkConfig:1</serviceType>
+                                <serviceId>urn:upnp-org:serviceId:WANEthLinkC1</serviceId>
+                                <controlURL>/ctl/EthCfg</controlURL>
+                                <eventSubURL>/evt/Ethcfg</eventSubURL>
+                                <SCPDURL>/WANETHCfg.xml</SCPDURL>
+                            </service>
+                            <service>
+                                <serviceType>urn:schemas-upnp-org:service:WANIPConnection:1</serviceType>
+                                <serviceId>urn:upnp-org:serviceId:WANIPConn1</serviceId>
+                                <controlURL>/ctl/IPConn</controlURL>
+                                <eventSubURL>/evt/IPConn</eventSubURL>
+                                <SCPDURL>/WANIPCn.xml</SCPDURL>
+                            </service>
+                            <service>
+                                <serviceType>urn:schemas-upnp-org:service:WANPPPConnection:1</serviceType>
+                                <serviceId>urn:upnp-org:serviceId:WANPPPConn1</serviceId>
+                                <controlURL>/ctl/PPPConn</controlURL>
+                                <eventSubURL>/evt/PPPConn</eventSubURL>
+                                <SCPDURL>/WANPPPCn.xml</SCPDURL>
+                            </service>
+                        </serviceList>
+                    </device>
+                </deviceList>
+            </device>
+            <device>
+                <deviceType>urn:schemas-upnp-org:device:LANDevice:1</deviceType>
+                <friendlyName>LANDevice</friendlyName>
+                <manufacturer>NETGEAR</manufacturer>
+                <manufacturerURL>http://www.netgear.com/</manufacturerURL>
+                <modelDescription>LAN Device</modelDescription>
+                <modelName>LAN Device</modelName>
+                <modelNumber>20070827</modelNumber>
+                <modelURL>http://www.netgear.com/</modelURL>
+                <serialNumber>51Y58ABE0007E</serialNumber>
+                <UDN>uuid:824ff22b-8c7d-41c5-a131-78d29484ac59</UDN>
+                <UPC>R6230</UPC>
+                <serviceList>
+                    <service>
+                        <serviceType>urn:schemas-upnp-org:service:LANHostConfigManagement:1</serviceType>
+                        <serviceId>urn:upnp-org:serviceId:LANHostCfg1</serviceId>
+                        <controlURL>/ctl/LANHostcfg</controlURL>
+                        <eventSubURL>/evt/LANHostcfg</eventSubURL>
+                        <SCPDURL>/LANHOSTCFG.xml</SCPDURL>
+                    </service>
+                </serviceList>
+            </device>
+        </deviceList>
+        <presentationURL>http://192.168.1.1/</presentationURL>
+    </device>
+</root>
