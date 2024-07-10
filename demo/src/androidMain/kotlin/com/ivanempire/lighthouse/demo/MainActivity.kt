@@ -54,6 +54,9 @@ class MainActivity : ComponentActivity() {
                 discoveredDeviceList = discoveredDeviceList,
                 startDiscovery = viewModel::startDiscovery,
                 stopDiscovery = viewModel::stopDiscovery,
+                getDetails = {
+                    lighthouseClient.retrieveDescription(it)
+                }
             )
         }
     }
